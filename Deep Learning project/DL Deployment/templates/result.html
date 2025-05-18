@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Classification Result</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Classification Result</h1>
+        
+        <div class="card mb-4">
+            <img src="{{ url_for('static', filename='uploads/' + filename) }}" class="card-img-top" alt="Uploaded Image">
+            <div class="card-body text-center">
+                <h3 class="card-title">
+                    <i class="bi bi-trophy-fill me-2"></i>{{ predicted_class }}
+                </h3>
+                <p class="card-text">Confidence: {{ confidence|round(1) }}%</p>
+            </div>
+        </div>
+        
+        <h4><i class="bi bi-bar-chart-fill me-2"></i>Top Predictions</h4>
+        {% for name, conf in predictions %}
+        <div class="prediction-container">
+            <div class="prediction-label">
+                <span>{{ name }}</span>
+                <span>{{ conf|round(1) }}%</span>
+            </div>
+            <div class="prediction-bar-container">
+                <div class="prediction-bar" style="width: {{ conf }}%;"></div>
+            </div>
+        </div>
+        {% endfor %}
+        
+        <div class="d-grid mt-4">
+            <a href="/" class="btn btn-primary">
+                <i class="bi bi-arrow-repeat me-2"></i>Classify Another Image
+            </a>
+        </div>
+
+        <div class="footer">
+            <p>Sports Image Classification Project</p>
+        </div>
+    </div>
+</body>
+</html>

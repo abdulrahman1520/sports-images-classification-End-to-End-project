@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sports Image Classifier</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Sports Image Classifier</h1>
+        
+        {% if error %}
+        <div class="alert alert-danger">
+            <i class="bi bi-exclamation-triangle-fill"></i> {{ error }}
+        </div>
+        {% endif %}
+        
+        <form action="/predict" method="post" enctype="multipart/form-data" class="mb-4">
+            <div class="upload-area" onclick="document.getElementById('file').click();">
+                <div class="upload-icon">
+                    <i class="bi bi-cloud-arrow-up"></i>
+                </div>
+                <div class="upload-text">
+                    Click or drop an image here to classify
+                </div>
+                <p class="upload-note">
+                    Supports JPG, JPEG and PNG formats
+                </p>
+            </div>
+            
+            <div class="mb-3">
+                <input type="file" name="file" id="file" class="form-control d-none" accept=".jpg,.jpeg,.png" required>
+            </div>
+            
+            <div class="d-grid">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-search"></i> Classify Image
+                </button>
+            </div>
+        </form>
+        
+        <div class="alert alert-info">
+            <i class="bi bi-info-circle-fill"></i> This application can classify images of the following sports:
+            <ul>
+                {% for class_name in class_names %}
+                <li>{{ class_name }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="footer">
+            <p>Sports Image Classification Project</p>
+        </div>
+    </div>
+
+    <script>
+        // Show selected filename
+        document.getElementById('file').addEventListener('change', function(e) {
+            var fileName = e.target.files[0].name;
+            var uploadText = document.querySelector('.upload-text');
+            uploadText.innerHTML = 'Selected file: <strong>' + fileName + '</strong>';
+        });
+        
+        // Drag and drop functionality
+        var dropArea = document.querySelector('.upload-area');
+        
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, preventDefaults, false);
+        });
+        
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropArea.addEventListener(eventName, highlight, false);
+        });
+        
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, unhighlight, false);
+        });
+        
+        function highlight() {
+            dropArea.classList.add('bg-light');
+        }
+        
+        function unhighlight() {
+            dropArea.classList.remove('bg-light');
+        }
+        
+        dropArea.addEventListener('drop', handleDrop, false);
+        
+        function handleDrop(e) {
+            var dt = e.dataTransfer;
+            var files = dt.files;
+            
+            document.getElementById('file').files = files;
+            
+            var fileName = files[0].name;
+            var uploadText = document.querySelector('.upload-text');
+            uploadText.innerHTML = 'Selected file: <strong>' + fileName + '</strong>';
+        }
+    </script>
+</body>
+</html>

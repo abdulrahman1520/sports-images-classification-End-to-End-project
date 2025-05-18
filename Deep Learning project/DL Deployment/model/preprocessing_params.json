@@ -1,0 +1,1 @@
+{"image_size": 64, "mean": [104.33723123262922, 104.66201131811405, 100.75211587717313], "std": [73.60823231524287, 71.4386616837142, 72.12731631876864], "class_names": ["Badminton", "Cricket", "Karate", "Soccer", "Swimming", "Tennis", "Wrestling"]}
